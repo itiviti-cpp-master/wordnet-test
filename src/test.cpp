@@ -5,7 +5,7 @@ class WordNetTest : public ::testing::Test
 {
 protected:
     static void SetUpTestSuite()
-    { m_wordnet = new WordNet("src/synsets.txt", "src/hypernyms.txt"); }
+    { m_wordnet = new WordNet("etc/synsets.txt", "etc/hypernyms.txt"); }
 
     static void TearDownTestSuite()
     {
