@@ -40,7 +40,7 @@ TEST_F(WordNetTest, Basic)
         ++it;
     }
 
-    ASSERT_TRUE(146547 == n);
+    ASSERT_TRUE(119188 == n);
 }
 
 TEST_F(WordNetTest, Search)
@@ -76,6 +76,9 @@ TEST_F(WordNetTest, Outcast)
     std::vector<std::string> d5 {"horse", "zebra", "cat", "bear", "table"};
     ASSERT_TRUE(m_outcast->outcast(d5) == "table");
 
+    std::vector<std::string> d4 {"probability", "statistics", "mathematics", "physics"};
+    ASSERT_TRUE(m_outcast->outcast(d4) == "probability");
+
     std::vector<std::string> d6 {"earth", "fire", "air", "water", "heart"};
     ASSERT_TRUE(m_outcast->outcast(d6) == "heart");
 
@@ -90,6 +93,9 @@ TEST_F(WordNetTest, Outcast)
 
     std::vector<std::string> d10 {"apple", "orange", "banana", "grape", "strawberry", "cabbage", "mango", "watermelon"};
     ASSERT_TRUE(m_outcast->outcast(d10) == "cabbage");
+
+    std::vector<std::string> d11 {"car", "auto", "truck", "plane", "tree", "train", "vehicle", "van"};
+    ASSERT_TRUE(m_outcast->outcast(d11) == "tree");
 
     std::vector<std::string> d14 {"cat", "cheetah", "dog", "wolf", "albatross", "horse", "zebra", "lemur", "orangutan", "chimpanzee"};
     ASSERT_TRUE(m_outcast->outcast(d14) == "albatross");
