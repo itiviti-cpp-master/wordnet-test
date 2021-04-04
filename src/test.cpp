@@ -97,6 +97,12 @@ TEST_F(WordNetTest, Outcast)
     std::vector<std::string> d11 {"car", "auto", "truck", "plane", "tree", "train", "vehicle", "van"};
     ASSERT_TRUE(m_outcast->outcast(d11) == "tree");
 
+    std::vector<std::string> d12 {"lumber", "wood", "tree", "leaf", "nail", "house", "building", "edifice", "structure"};
+    ASSERT_TRUE(m_outcast->outcast(d12) == "tree");
+
+    std::vector<std::string> d13 {"hair", "eyes", "arm", "mouth", "nose", "ear", "cheek", "brow", "chin"};
+    ASSERT_TRUE(m_outcast->outcast(d13) == "arm");
+
     std::vector<std::string> d14 {"cat", "cheetah", "dog", "wolf", "albatross", "horse", "zebra", "lemur", "orangutan", "chimpanzee"};
     ASSERT_TRUE(m_outcast->outcast(d14) == "albatross");
 
@@ -106,3 +112,4 @@ TEST_F(WordNetTest, Outcast)
     std::vector<std::string> d16 {"apple", "pear", "peach", "banana", "lime", "lemon", "blueberry", "strawberry", "mango", "watermelon", "potato"};
     ASSERT_TRUE(m_outcast->outcast(d16) == "potato");
 }
+
