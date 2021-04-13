@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "wordnet.h"
+#include "test_iterator.h"
 
 class WordNetTest : public ::testing::Test
 {
@@ -18,6 +19,12 @@ protected:
         m_outcast = nullptr;
     }
 
+    WordNet & not_empty_container()
+    {
+        return *m_wordnet;
+    }
+
+    using iterator_t = WordNet::iterator;
     static WordNet * m_wordnet;
     static Outcast * m_outcast;
 };
@@ -31,7 +38,7 @@ TEST_F(WordNetTest, Basic)
     ASSERT_TRUE(m_wordnet->is_noun("genus_Commiphora"));
     ASSERT_TRUE(m_wordnet->is_noun("barbershop_quartet"));
 
-    auto it = m_wordnet->nouns();
+    auto it = m_wordnet->begin();
     auto end = m_wordnet->end();
     ASSERT_TRUE(it != end);
     size_t n = 0;
@@ -113,3 +120,19 @@ TEST_F(WordNetTest, Outcast)
     ASSERT_TRUE(m_outcast->outcast(d16) == "potato");
 }
 
+TEST_F(WordNetTest, MultiThreadIteratorAccess)
+{
+    auto it = m_wordnet->begin();
+    auto end = m_wordnet->end();
+
+    std::vector<iterator_test::Job<iterator_t>> jobs;
+    size_t count = 10;
+    for (size_t i = 0; i < count; ++i) {
+        jobs.emplace_back([it, end]() -> std::pair<iterator_t, iterator_t> { return {it, end}; }, 
+                            iterator_test::test_multipass<iterator_t>);
+    }
+    iterator_test::run_multithread<iterator_t>(jobs);
+}
+
+using TypesToTest = ::testing::Types<WordNetTest>;
+INSTANTIATE_TYPED_TEST_SUITE_P(WN, IteratorTest, TypesToTest);
