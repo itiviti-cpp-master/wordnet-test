@@ -72,10 +72,10 @@ TEST_F(WordNetTest, Search)
 TEST_F(WordNetTest, Outcast)
 {
     std::vector<std::string> d1 {"Turing"};
-    ASSERT_TRUE(m_outcast->outcast(d1) == "");
+    ASSERT_TRUE(m_outcast->outcast(d1).empty());
 
     std::vector<std::string> d2 {"Turing", "von_Neumann"};
-    ASSERT_TRUE(m_outcast->outcast(d2) == "");
+    ASSERT_TRUE(m_outcast->outcast(d2).empty());
 
     std::vector<std::string> d3 {"Turing", "von_Neumann", "Mickey_Mouse"};
     ASSERT_TRUE(m_outcast->outcast(d3) == "Mickey_Mouse");
