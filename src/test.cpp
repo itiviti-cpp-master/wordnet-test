@@ -7,7 +7,7 @@ class WordNetTest : public ::testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        m_wordnet = new WordNet("etc/synsets.txt", "etc/hypernyms.txt"); 
+        m_wordnet = new WordNet("tests/etc/synsets.txt", "tests/etc/hypernyms.txt"); 
         m_outcast = new Outcast(*m_wordnet);
     }
 
