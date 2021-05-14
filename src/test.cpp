@@ -120,6 +120,16 @@ TEST_F(WordNetTest, Outcast)
 
     std::vector<std::string> d16 {"apple", "pear", "peach", "banana", "lime", "lemon", "blueberry", "strawberry", "mango", "watermelon", "potato"};
     ASSERT_TRUE(m_outcast->outcast(d16) == "potato");
+
+    // Extra test coverage by @dedlocc
+    ASSERT_TRUE(m_wordnet->distance("nose", "ear") == 3);
+    ASSERT_TRUE(m_wordnet->distance("ear", "nose") == 3);
+    ASSERT_TRUE(m_wordnet->distance("ware", "tinware") == 2);
+    ASSERT_TRUE(m_wordnet->distance("gesso", "defoliant") == 5);
+
+    std::vector<std::string> d17 {"oak", "pine", "birch", "acacia"};
+    ASSERT_TRUE(m_outcast->outcast(d17).empty());
+    //
 }
 
 TEST_F(WordNetTest, MultiThreadIteratorAccess)
