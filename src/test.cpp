@@ -143,7 +143,7 @@ TEST_F(WordNetTest, MultiThreadIteratorAccess)
         jobs.emplace_back([it, end]() -> std::pair<iterator_t, iterator_t> { return {it, end}; }, 
                             iterator_test::test_multipass<iterator_t>);
     }
-    iterator_test::run_multithread<iterator_t>(jobs);
+    iterator_test::run_multithread<iterator_t>(jobs, 10);
 }
 
 using TypesToTest = ::testing::Types<WordNetTest>;
