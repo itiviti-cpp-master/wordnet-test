@@ -258,7 +258,7 @@ TYPED_TEST_SUITE_P(IteratorTest);
 
 TYPED_TEST_P(IteratorTest, basic)
 {
-    auto & data = this->not_empty_container();
+    const auto & data = this->not_empty_container();
     iterator_test::test_basic(data.begin(), data.end());
 }
 
