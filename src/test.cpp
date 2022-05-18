@@ -1,10 +1,9 @@
-#include "wordnet.h"
 #include "test_iterator.h"
-
-#include <gtest/gtest.h>
+#include "wordnet.h"
 
 #include <algorithm>
 #include <fstream>
+#include <gtest/gtest.h>
 #include <memory>
 #include <sstream>
 #include <vector>
@@ -52,7 +51,7 @@ TEST_F(WordNetTest, nouns)
 82145,zombi zombie living_dead,a dead body that has been brought back to life by a supernatural force
 82146,zombi zombie snake_god,a god of voodoo cults of African origin worshipped especially in West Indies  
 )"};
-    
+
     std::istringstream hypernyms;
 
     WordNet wordnet{synsets, hypernyms};
@@ -77,7 +76,7 @@ TEST_F(WordNetTest, distance)
 3,c,c gloss
 4,d bd,d gloss
 )"};
-    
+
     std::istringstream hypernyms{R"(
 2,1
 3,1
@@ -91,6 +90,41 @@ TEST_F(WordNetTest, distance)
     EXPECT_EQ(wordnet.distance("a", "b"), 1);
     EXPECT_EQ(wordnet.distance("b", "a"), 1);
     EXPECT_EQ(wordnet.distance("b", "c"), 2);
+
+    EXPECT_EQ(wordnet.distance("d", "a"), 2);
+    EXPECT_EQ(wordnet.distance("d", "c"), 1);
+
+    EXPECT_EQ(wordnet.distance("bd", "c"), 1);
+}
+
+//---------------------------------------------------------------------------
+
+TEST_F(WordNetTest, direction)
+{
+    std::istringstream synsets{R"(
+1,a a1,a gloss
+2,b bd,b gloss
+3,c,c gloss
+4,d bd,d gloss
+5,e,e gloss
+6,f,f gloss
+)"};
+
+    std::istringstream hypernyms{R"(
+1,2,3
+2,5
+3,4
+4,6
+5,6
+)"};
+
+    WordNet wordnet{synsets, hypernyms};
+
+    EXPECT_EQ(wordnet.distance("a", "a"), 0);
+    EXPECT_EQ(wordnet.distance("a", "a1"), 0);
+    EXPECT_EQ(wordnet.distance("a", "b"), 1);
+    EXPECT_EQ(wordnet.distance("b", "a"), 1);
+    EXPECT_EQ(wordnet.distance("b", "c"), 4);
 
     EXPECT_EQ(wordnet.distance("d", "a"), 2);
     EXPECT_EQ(wordnet.distance("d", "c"), 1);
@@ -146,7 +180,7 @@ TEST_F(WordNetTest, Outcast)
     EXPECT_EQ(m_outcast->outcast({"apple", "orange", "banana", "grape", "strawberry", "cabbage", "mango", "watermelon"}), "cabbage");
     EXPECT_EQ(m_outcast->outcast({"car", "auto", "truck", "plane", "tree", "train", "vehicle", "van"}), "tree");
     EXPECT_EQ(m_outcast->outcast({"lumber", "wood", "tree", "leaf", "nail", "house", "building", "edifice", "structure"}), "tree");
-    //EXPECT_EQ(m_outcast->outcast({"hair", "eyes", "arm", "mouth", "nose", "ear", "cheek", "brow", "chin"}), "arm");
+    // EXPECT_EQ(m_outcast->outcast({"hair", "eyes", "arm", "mouth", "nose", "ear", "cheek", "brow", "chin"}), "arm");
     EXPECT_EQ(m_outcast->outcast({"cat", "cheetah", "dog", "wolf", "albatross", "horse", "zebra", "lemur", "orangutan", "chimpanzee"}), "albatross");
     EXPECT_EQ(m_outcast->outcast({"blue", "green", "yellow", "brown", "black", "white", "orange", "violet", "red", "serendipity"}), "serendipity");
     EXPECT_EQ(m_outcast->outcast({"apple", "pear", "peach", "banana", "lime", "lemon", "blueberry", "strawberry", "mango", "watermelon", "potato"}), "potato");
@@ -161,8 +195,8 @@ TEST_F(WordNetTest, MultiThreadIteratorAccess)
     std::vector<iterator_test::Job<iterator_t>> jobs;
     size_t count = 10;
     for (size_t i = 0; i < count; ++i) {
-        jobs.emplace_back([it, end]() -> std::pair<iterator_t, iterator_t> { return {it, end}; }, 
-                            iterator_test::test_multipass<iterator_t>);
+        jobs.emplace_back([it, end]() -> std::pair<iterator_t, iterator_t> { return {it, end}; },
+                          iterator_test::test_multipass<iterator_t>);
     }
     iterator_test::run_multithread<iterator_t>(jobs, 10);
 }
