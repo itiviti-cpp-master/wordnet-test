@@ -134,6 +134,38 @@ TEST_F(WordNetTest, direction)
 
 //------------------------------------------------------------------------------
 
+TEST_F(WordNetTest, unordered)
+{
+    std::istringstream synsets{R"(
+123456,a a1,a gloss
+25,b bd,b gloss
+179,c,c gloss
+2000000,d bd,d gloss
+)"};
+
+    std::istringstream hypernyms{R"(
+25,123456
+179,123456
+2000000,25,179
+)"};
+
+    WordNet wordnet{synsets, hypernyms};
+
+    EXPECT_EQ(wordnet.distance("a", "a"), 0);
+    EXPECT_EQ(wordnet.distance("a", "a1"), 0);
+    EXPECT_EQ(wordnet.distance("a", "b"), 1);
+    EXPECT_EQ(wordnet.distance("b", "a"), 1);
+    EXPECT_EQ(wordnet.distance("b", "c"), 2);
+
+    EXPECT_EQ(wordnet.distance("d", "a"), 2);
+    EXPECT_EQ(wordnet.distance("d", "c"), 1);
+
+    EXPECT_EQ(wordnet.distance("bd", "c"), 1);
+}
+
+//------------------------------------------------------------------------------
+
+
 TEST_F(WordNetTest, Basic)
 {
     EXPECT_TRUE(m_wordnet->is_noun("whole-word_method"));
