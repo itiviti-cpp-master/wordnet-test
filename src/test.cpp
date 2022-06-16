@@ -134,6 +134,30 @@ TEST_F(WordNetTest, direction)
 
 //------------------------------------------------------------------------------
 
+TEST_F(WordNetTest, direction1)
+{
+    std::istringstream synsets{R"(
+1,a,a gloss
+2,b,b gloss
+3,c,c gloss
+4,d,d gloss
+5,f,d gloss
+)"};
+
+    std::istringstream hypernyms{R"(
+3,1,2
+2,1
+5,2
+4,3
+)"};
+
+    WordNet wordnet{synsets, hypernyms};
+
+    EXPECT_EQ(wordnet.distance("d", "f"), 3);
+}
+
+//------------------------------------------------------------------------------
+
 TEST_F(WordNetTest, unordered)
 {
     std::istringstream synsets{R"(
