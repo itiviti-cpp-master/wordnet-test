@@ -220,6 +220,69 @@ TEST_F(WordNetTest, Search)
     EXPECT_EQ(m_wordnet->distance("ear", "nose"), 3);
     EXPECT_EQ(m_wordnet->distance("ware", "tinware"), 2);
     EXPECT_EQ(m_wordnet->distance("gesso", "defoliant"), 5);
+    EXPECT_EQ(m_wordnet->distance("freshener", "Great_Lakes"), 5);
+}
+
+TEST_F(WordNetTest, SynsetsGloss)
+{
+    EXPECT_TRUE(m_wordnet->is_noun("Amazon"));
+    EXPECT_EQ(m_wordnet->sca("Amazon", "Amazon"), "(Greek mythology) one of a nation of women warriors of Scythia (who burned off the right breast in order to use a bow and arrow more effectively)  ");
+    EXPECT_TRUE(m_wordnet->is_noun("application-oriented_language"));
+    EXPECT_TRUE(m_wordnet->is_noun("problem-oriented_language"));
+    EXPECT_EQ(m_wordnet->sca("application-oriented_language", "problem-oriented_language"), "a language whose statements resemble terminology of the user  ");
+    EXPECT_TRUE(m_wordnet->is_noun("Alopius"));
+    EXPECT_TRUE(m_wordnet->is_noun("Alosa"));
+    EXPECT_EQ(m_wordnet->sca("Alopius", "Alosa"), "any of various genus of fish  ");
+    EXPECT_TRUE(m_wordnet->is_noun("Alpena"));
+    EXPECT_TRUE(m_wordnet->is_noun("Appleton"));
+    EXPECT_EQ(m_wordnet->sca("Alpena", "Appleton"), "an urban area with a fixed boundary that is smaller than a city; \"they drive through town on their way to work\"  ");
+    EXPECT_TRUE(m_wordnet->is_noun("Aarhus"));
+    EXPECT_EQ(m_wordnet->sca("Alpena", "Aarhus"), "a place (seaport or airport) where people and merchandise can enter or leave a country  ");
+    EXPECT_TRUE(m_wordnet->is_noun("position"));
+    EXPECT_EQ(m_wordnet->sca("Aarhus", "position"), "the precise location of something; a spatially limited location; \"she walked to a point where she could survey the whole street\"  ");
+    EXPECT_EQ(m_wordnet->sca("nose", "ear"), "an organ having nerve endings (in the skin or viscera or eye or ear or nose or mouth) that respond to stimulation  ");
+    EXPECT_EQ(m_wordnet->sca("ear", "nose"), "an organ having nerve endings (in the skin or viscera or eye or ear or nose or mouth) that respond to stimulation  ");
+    EXPECT_EQ(m_wordnet->sca("ware", "tinware"), "articles of the same kind or material; usually used in combination: `silverware', `software'  ");
+    EXPECT_EQ(m_wordnet->sca("gesso", "defoliant"), "(chemistry) a substance formed by chemical union of two or more elements or ingredients in definite proportion by weight  ");
+    EXPECT_EQ(m_wordnet->sca("freshener", "Great_Lakes"), "that which is perceived or known or inferred to have its own distinct existence (living or nonliving)  ");
+}
+
+TEST_F(WordNetTest, SynsetsMultipleGloss)
+{
+    EXPECT_TRUE("canvas");
+    EXPECT_TRUE("canvass");
+    const auto canvas_canvass = {
+            "the setting for a narrative or fictional or dramatic account; \"the crowded canvas of history\"; \"the movie demanded a dramatic canvas of sound\"  ",
+            "an oil painting on canvas fabric  ",
+            "the mat that forms the floor of the ring in which boxers or professional wrestlers compete; \"the boxer picked himself up off the canvas\"  ",
+            "a heavy, closely woven fabric (used for clothing or chairs or sails or tents)  ",
+            "a tent made of canvas fabric  ",
+            "a large piece of fabric (usually canvas fabric) by means of which wind is used to propel a sailing vessel  "
+    };
+    EXPECT_TRUE(std::find(canvas_canvass.begin(), canvas_canvass.end(), m_wordnet->sca("canvas", "canvass")) != canvas_canvass.end());
+    EXPECT_TRUE(m_wordnet->is_noun("range"));
+    EXPECT_TRUE(m_wordnet->is_noun("reach"));
+    const auto range_reach = {
+            "the limit of capability; \"within the compass of education\"   ",
+            "the limits within which something can be effective; \"range of motion\"; \"he was beyond the reach of their fire\"  ",
+            "an area in which something acts or operates or has power or control: \"the range of a supersonic jet\"; \"a piano has a greater range than the human voice\"; \"the ambit of municipal legislation\"; \"within the compass of this article\"; \"within the scope of an investigation\"; \"outside the reach of the law\"; \"in the political orbit of a world power\"  "
+    };
+    EXPECT_TRUE(std::find(range_reach.begin(), range_reach.end(), m_wordnet->sca("range", "reach")) != range_reach.end());
+    EXPECT_TRUE(m_wordnet->is_noun("state_capital"));
+    EXPECT_TRUE(m_wordnet->is_noun("provincial_capital"));
+    EXPECT_TRUE(m_wordnet->is_noun("national_capital"));
+    const auto state_provincial_national_capital = {
+            "a seat of government  ",
+            "a large and densely populated urban area; may include several independent administrative districts; \"Ancient Troy was a great city\"  "
+    };
+    EXPECT_TRUE(std::find(state_provincial_national_capital.begin(), state_provincial_national_capital.end(), m_wordnet->sca("state_capital", "provincial_capital")));
+    EXPECT_TRUE(std::find(state_provincial_national_capital.begin(), state_provincial_national_capital.end(), m_wordnet->sca("state_capital", "national_capital")));
+    EXPECT_TRUE(std::find(state_provincial_national_capital.begin(), state_provincial_national_capital.end(), m_wordnet->sca("provincial_capital", "national_capital")));
+    const auto nose_hearing = {
+            "sensitivity to stimuli originating outside of the body  ",
+            "a particular sense  "
+    };
+    EXPECT_TRUE(std::find(nose_hearing.begin(), nose_hearing.end(), m_wordnet->sca("nose", "hearing")) != nose_hearing.end());
 }
 
 TEST_F(WordNetTest, Outcast)
