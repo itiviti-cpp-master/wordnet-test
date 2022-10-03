@@ -263,7 +263,7 @@ TEST_F(WordNetTest, SynsetsMultipleGloss)
     EXPECT_TRUE(m_wordnet->is_noun("range"));
     EXPECT_TRUE(m_wordnet->is_noun("reach"));
     const auto range_reach = {
-            "the limit of capability; \"within the compass of education\"   ",
+            "the limit of capability; \"within the compass of education\"  ",
             "the limits within which something can be effective; \"range of motion\"; \"he was beyond the reach of their fire\"  ",
             "an area in which something acts or operates or has power or control: \"the range of a supersonic jet\"; \"a piano has a greater range than the human voice\"; \"the ambit of municipal legislation\"; \"within the compass of this article\"; \"within the scope of an investigation\"; \"outside the reach of the law\"; \"in the political orbit of a world power\"  "
     };
